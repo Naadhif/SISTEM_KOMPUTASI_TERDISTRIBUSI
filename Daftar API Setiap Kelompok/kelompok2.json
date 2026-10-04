@@ -1,0 +1,924 @@
+{
+	"info": {
+		"_postman_id": "9b12a801-7fa8-48b2-b5e1-d8975ce7c834",
+		"name": "Sistem Pakar Diabetes Melitus API",
+		"description": "Koleksi API lengkap untuk Sistem Pakar Diagnosis Diabetes Melitus (Metode Certainty Factor).\n\nBase URL default: `{{base_url}}` (default: `http://localhost:8000/api/v1`).\n\n### Cara Penggunaan:\n1. Buka request **1. Auth > Login**\n2. Klik **Send** menggunakan akun default:\n   - Email: `admin@glucoseplus.com`\n   - Password: `password`\n3. Token Bearer otomatis disimpan ke variabel `{{bearer_token}}` melalui Test Script.\n4. Semua request yang memerlukan otentikasi (Admin) otomatis menggunakan token tersebut.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{bearer_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000/api/v1",
+			"type": "string"
+		},
+		{
+			"key": "bearer_token",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "1. Authentication",
+			"description": "Endpoint manajemen otentikasi (Sanctum)",
+			"item": [
+				{
+					"name": "Login (Auto-set Token)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.data && jsonData.data.token) {",
+									"        pm.collectionVariables.set(\"bearer_token\", jsonData.data.token);",
+									"        console.log(\"Token berhasil disimpan:\", jsonData.data.token);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@glucoseplus.com\",\n    \"password\": \"password\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "Login menggunakan email & password. Script otomatis menyimpan Bearer Token ke variabel koleksi."
+					},
+					"response": []
+				},
+				{
+					"name": "Register User",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Dokter Baru\",\n    \"email\": \"dokter.baru@glucoseplus.com\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\",\n    \"role\": \"admin\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						},
+						"description": "Registrasi user baru ke dalam sistem."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current User (Me)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/auth/me",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"me"
+							]
+						},
+						"description": "Mendapatkan profil user yang sedang login menggunakan Bearer Token."
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/auth/logout",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"logout"
+							]
+						},
+						"description": "Revoke dan hapus token aktif saat ini."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "2. Screening & Diagnosis (Public)",
+			"description": "Endpoint utama untuk konsultasi diagnosis diabetes berbasis Certainty Factor (CF).",
+			"item": [
+				{
+					"name": "Screening - Dengan Gejala (Positif Kasus)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nama\": \"Budi Santoso\",\n    \"email\": \"budi.santoso@example.com\",\n    \"jeniskelamin\": \"Laki-laki\",\n    \"gejalas\": [1, 2, 3, 4, 15]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/screening",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"screening"
+							]
+						},
+						"description": "Menjalankan diagnosa CF berdasarkan gejala yang dipilih pasien. Gejala 1=Sering haus, 2=Sering lapar, 3=Sering kencing, 4=Turun BB, 15=Peningkatan gula darah."
+					},
+					"response": []
+				},
+				{
+					"name": "Screening - Tanpa Gejala (Normal)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nama\": \"Dewi Lestari\",\n    \"email\": \"dewi.lestari@example.com\",\n    \"jeniskelamin\": \"Perempuan\",\n    \"no_symptoms\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/screening",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"screening"
+							]
+						},
+						"description": "Skrining dengan kondisi pasien menyatakan tidak ada gejala yang dirasakan (langsung didiagnosis Normal 100%)."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "3. Gejala (Symptoms)",
+			"description": "Manajemen data gejala dan bobot CF pakar.",
+			"item": [
+				{
+					"name": "Get All Gejala (Public)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/gejalas",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"gejalas"
+							]
+						},
+						"description": "Mendapatkan seluruh daftar gejala diabetes beserta kode dan nilai CF pakar."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Gejala Detail (Public)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/gejalas/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"gejalas",
+								"1"
+							]
+						},
+						"description": "Melihat detail satu gejala beserta penyakit-penyakit yang terkait."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Gejala (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"kode_gejala\": \"G20\",\n    \"nama_gejala\": \"Nafas berbau aseton atau buah\",\n    \"nilai_cf\": 0.8\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/gejalas",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"gejalas"
+							]
+						},
+						"description": "Menambahkan data gejala baru beserta nilai CF (antara 0 sampai 1)."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Gejala (Admin)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"kode_gejala\": \"G20\",\n    \"nama_gejala\": \"Nafas berbau aseton atau buah (ketonemia)\",\n    \"nilai_cf\": 0.85\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/gejalas/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"gejalas",
+								"1"
+							]
+						},
+						"description": "Mengubah informasi gejala yang sudah ada."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Gejala (Admin)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/gejalas/20",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"gejalas",
+								"20"
+							]
+						},
+						"description": "Menghapus gejala berdasarkan ID."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "4. Penyakit (Diseases)",
+			"description": "Manajemen data penyakit, deskripsi penanganan, serta relasi gejala & bobot CF.",
+			"item": [
+				{
+					"name": "Get All Penyakit (Public)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/penyakits",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"penyakits"
+							]
+						},
+						"description": "Mendapatkan daftar semua jenis penyakit diabetes."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Penyakit Detail (Public)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/penyakits/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"penyakits",
+								"1"
+							]
+						},
+						"description": "Melihat detail penyakit lengkap dengan relasi gejala dan nilai CF masing-masing gejala."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Penyakit (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Pradiabetes\",\n    \"desc\": \"Kondisi ketika kadar gula darah lebih tinggi dari normal namun belum cukup tinggi untuk diklasifikasikan sebagai diabetes tipe 2.\",\n    \"penanganan\": \"Penerapan pola makan gizi seimbang, menurunkan berat badan berlebih, dan olahraga teratur 150 menit per minggu.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/penyakits",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"penyakits"
+							]
+						},
+						"description": "Menambahkan penyakit diabetes baru."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Penyakit (Admin)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Diabetes melitus tipe 1 (Juvenile)\",\n    \"desc\": \"Kondisi autoimun kronis di mana pankreas memproduksi sedikit atau tidak sama sekali hormon insulin.\",\n    \"penanganan\": \"Terapi injeksi insulin harian, pemantauan gula darah berkala, dan diet terkontrol karbohidrat.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/penyakits/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"penyakits",
+								"1"
+							]
+						},
+						"description": "Mengubah nama, deskripsi, atau saran penanganan penyakit."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Penyakit (Admin)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/penyakits/6",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"penyakits",
+								"6"
+							]
+						},
+						"description": "Menghapus data penyakit."
+					},
+					"response": []
+				},
+				{
+					"name": "Attach Gejala ke Penyakit (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"gejala_id\": 1,\n    \"cf\": 0.75\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/penyakits/1/gejalas",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"penyakits",
+								"1",
+								"gejalas"
+							]
+						},
+						"description": "Menghubungkan gejala ke penyakit dengan bobot Certainty Factor tertentu (sync/update pivot)."
+					},
+					"response": []
+				},
+				{
+					"name": "Detach Gejala dari Penyakit (Admin)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/penyakits/1/gejalas/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"penyakits",
+								"1",
+								"gejalas",
+								"1"
+							]
+						},
+						"description": "Melepaskan relasi gejala dari penyakit tertentu."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "5. Pasien (Patients)",
+			"description": "Pengelolaan data riwayat pasien yang telah melakukan skrining / konsultasi.",
+			"item": [
+				{
+					"name": "Get All Pasien (Paginated) (Admin)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/pasiens?page=1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pasiens"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Nomor halaman (15 data per halaman)"
+								}
+							]
+						},
+						"description": "Mendapatkan daftar pasien yang telah konsultasi dengan meta pagination."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Pasien Detail (Admin)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/pasiens/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pasiens",
+								"1"
+							]
+						},
+						"description": "Melihat detail data dan hasil diagnosis satu pasien."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Pasien (Admin)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nama\": \"Budi Santoso, S.T.\",\n    \"email\": \"budi.santoso@example.com\",\n    \"jeniskelamin\": \"Laki-laki\",\n    \"tanggalkonsultasi\": \"2026-09-28\",\n    \"hasil_diagnosis\": \"Diabetes melitus tipe 1 (85.00% kepastian)\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/pasiens/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pasiens",
+								"1"
+							]
+						},
+						"description": "Mengupdate data identitas atau riwayat diagnosis pasien."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Pasien (Admin)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/pasiens/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pasiens",
+								"1"
+							]
+						},
+						"description": "Menghapus rekam medis / data pasien."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "6. User Management (Admin)",
+			"description": "Pengelolaan data akun pengguna dan admin sistem.",
+			"item": [
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/users",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users"
+							]
+						},
+						"description": "Mendapatkan semua daftar akun user dalam sistem."
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Detail",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/users/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								"1"
+							]
+						},
+						"description": "Mendapatkan detail profil user tertentu."
+					},
+					"response": []
+				},
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Paramedis 1\",\n    \"email\": \"paramedis1@glucoseplus.com\",\n    \"password\": \"password123\",\n    \"role\": \"user\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/users",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users"
+							]
+						},
+						"description": "Membuat user baru (admin/user) langsung oleh admin."
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Paramedis Senior\",\n    \"email\": \"paramedis1@glucoseplus.com\",\n    \"role\": \"admin\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/users/2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								"2"
+							]
+						},
+						"description": "Mengubah data user (nama, email, role, atau password opsional)."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/users/2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								"2"
+							]
+						},
+						"description": "Menghapus akun user tertentu (proteksi aktif: tidak bisa menghapus diri sendiri)."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "7. Dashboard (Admin)",
+			"description": "Statistik ringkasan sistem untuk halaman dashboard.",
+			"item": [
+				{
+					"name": "Get Dashboard Stats",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/dashboard/stats",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"dashboard",
+								"stats"
+							]
+						},
+						"description": "Mengambil ringkasan total gejala, total penyakit, total pasien, total user, pasien hari ini, dan pasien bulan ini."
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

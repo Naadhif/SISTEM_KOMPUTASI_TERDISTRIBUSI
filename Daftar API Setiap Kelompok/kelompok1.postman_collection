@@ -1,0 +1,1019 @@
+{
+  "info": {
+    "_postman_id": "cae02a20-906a-4812-ba62-621b087c4962",
+    "name": "API KELOMPOK 1 - WEB Ruang Belajar",
+    "description": "38 endpoint API Ruang Belajar. Cukup import file ini (tanpa environment). Jalankan Autentikasi > POST - Login dulu, token tersimpan otomatis. Ubah base_url di tab Variables collection jika link devtunnel berganti.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "58395754",
+    "_collection_link": "https://go.postman.co/collection/58395754-cae02a20-906a-4812-ba62-621b087c4962?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Autentikasi",
+      "item": [
+        {
+          "name": "POST - Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 200) {\n    pm.collectionVariables.set('token', pm.response.json().data.token);\n}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"fahrul\",\n  \"password\": \"12345678\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET - User",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/user",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "user"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST - Logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/logout",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "logout"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Materi Kategori",
+      "item": [
+        {
+          "name": "GET - Daftar Materi Kategori",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/materi-kategori",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "materi-kategori"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET - Detail Materi Kategori",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/materi-kategori/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "materi-kategori",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST - Tambah Materi Kategori",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"grup\": \"akademik\",\n  \"nama\": \"Matematika Dasar\",\n  \"urutan\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/materi-kategori",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "materi-kategori"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT - Ubah Materi Kategori",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"grup\": \"akademik\",\n  \"nama\": \"Matematika Dasar\",\n  \"urutan\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/materi-kategori/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "materi-kategori",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE - Hapus Materi Kategori",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/materi-kategori/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "materi-kategori",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Materi",
+      "item": [
+        {
+          "name": "GET - Daftar Materi",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/materi",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "materi"
+              ],
+              "query": [
+                {
+                  "key": "materi_kategori_id",
+                  "value": "1",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET - Detail Materi",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/materi/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "materi",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST - Tambah Materi",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "materi_kategori_id",
+                  "value": "1",
+                  "type": "text"
+                },
+                {
+                  "key": "judul",
+                  "value": "Judul Materi",
+                  "type": "text"
+                },
+                {
+                  "key": "deskripsi",
+                  "value": "Deskripsi materi",
+                  "type": "text"
+                },
+                {
+                  "key": "file",
+                  "type": "file",
+                  "value": null
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/materi",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "materi"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT - Ubah Materi",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"materi_kategori_id\": 1,\n  \"judul\": \"Judul Materi (Revisi)\",\n  \"deskripsi\": \"Deskripsi materi\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/materi/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "materi",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE - Hapus Materi",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/materi/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "materi",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Latihan Materi",
+      "item": [
+        {
+          "name": "GET - Daftar Latihan Materi",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/latihan-materi",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "latihan-materi"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET - Detail Latihan Materi",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/latihan-materi/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "latihan-materi",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST - Tambah Latihan Materi",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama\": \"Tes Potensi Akademik\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/latihan-materi",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "latihan-materi"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT - Ubah Latihan Materi",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama\": \"Tes Potensi Akademik\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/latihan-materi/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "latihan-materi",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE - Hapus Latihan Materi",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/latihan-materi/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "latihan-materi",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Latihan Paket",
+      "item": [
+        {
+          "name": "GET - Daftar Latihan Paket",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/latihan-paket",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "latihan-paket"
+              ],
+              "query": [
+                {
+                  "key": "latihan_materi_id",
+                  "value": "1",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET - Detail Latihan Paket",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/latihan-paket/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "latihan-paket",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST - Tambah Latihan Paket",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"latihan_materi_id\": 1,\n  \"nama\": \"Paket 1 - Latihan Dasar\",\n  \"deskripsi\": \"Latihan soal tingkat dasar\",\n  \"durasi_menit\": 60,\n  \"aktif\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/latihan-paket",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "latihan-paket"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT - Ubah Latihan Paket",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"latihan_materi_id\": 1,\n  \"nama\": \"Paket 1 - Latihan Dasar\",\n  \"deskripsi\": \"Latihan soal tingkat dasar\",\n  \"durasi_menit\": 60,\n  \"aktif\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/latihan-paket/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "latihan-paket",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE - Hapus Latihan Paket",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/latihan-paket/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "latihan-paket",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Latihan Soal",
+      "item": [
+        {
+          "name": "GET - Daftar Latihan Soal",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/latihan-soal",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "latihan-soal"
+              ],
+              "query": [
+                {
+                  "key": "latihan_paket_id",
+                  "value": "1",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET - Detail Latihan Soal",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/latihan-soal/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "latihan-soal",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST - Tambah Latihan Soal",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"latihan_paket_id\": 1,\n  \"pertanyaan\": \"Berapakah hasil 2 + 2?\",\n  \"opsi_a\": \"3\",\n  \"opsi_b\": \"4\",\n  \"opsi_c\": \"5\",\n  \"opsi_d\": \"6\",\n  \"opsi_e\": \"7\",\n  \"kunci_jawaban\": \"b\",\n  \"pembahasan\": \"2 + 2 = 4\",\n  \"urutan\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/latihan-soal",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "latihan-soal"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT - Ubah Latihan Soal",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"latihan_paket_id\": 1,\n  \"pertanyaan\": \"Berapakah hasil 2 + 2?\",\n  \"opsi_a\": \"3\",\n  \"opsi_b\": \"4\",\n  \"opsi_c\": \"5\",\n  \"opsi_d\": \"6\",\n  \"opsi_e\": \"7\",\n  \"kunci_jawaban\": \"b\",\n  \"pembahasan\": \"2 + 2 = 4\",\n  \"urutan\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/latihan-soal/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "latihan-soal",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE - Hapus Latihan Soal",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/latihan-soal/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "latihan-soal",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Bank Soal Kategori",
+      "item": [
+        {
+          "name": "GET - Daftar Bank Soal Kategori",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/bank-soal-kategori",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "bank-soal-kategori"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET - Detail Bank Soal Kategori",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/bank-soal-kategori/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "bank-soal-kategori",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST - Tambah Bank Soal Kategori",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama\": \"Soal UTBK\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/bank-soal-kategori",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "bank-soal-kategori"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT - Ubah Bank Soal Kategori",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama\": \"Soal UTBK\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/bank-soal-kategori/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "bank-soal-kategori",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE - Hapus Bank Soal Kategori",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/bank-soal-kategori/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "bank-soal-kategori",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Bank Soal Materi",
+      "item": [
+        {
+          "name": "GET - Daftar Bank Soal Materi",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/bank-soal-materi",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "bank-soal-materi"
+              ],
+              "query": [
+                {
+                  "key": "bank_soal_kategori_id",
+                  "value": "1",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET - Detail Bank Soal Materi",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/bank-soal-materi/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "bank-soal-materi",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST - Tambah Bank Soal Materi",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "bank_soal_kategori_id",
+                  "value": "1",
+                  "type": "text"
+                },
+                {
+                  "key": "judul",
+                  "value": "Soal UTBK 2025",
+                  "type": "text"
+                },
+                {
+                  "key": "file",
+                  "type": "file",
+                  "value": null
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/bank-soal-materi",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "bank-soal-materi"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT - Ubah Bank Soal Materi",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bank_soal_kategori_id\": 1,\n  \"judul\": \"Soal UTBK 2025 (Revisi)\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/bank-soal-materi/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "bank-soal-materi",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE - Hapus Bank Soal Materi",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/bank-soal-materi/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "bank-soal-materi",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "pm.request.headers.upsert({ key: 'Accept', value: 'application/json' });"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://4m7q8cmw-8000.asse.devtunnels.ms/api"
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ]
+}

@@ -1,0 +1,423 @@
+{
+	"info": {
+		"_postman_id": "8f3b4c10-91a7-4c17-b7df-192a2a019e01",
+		"name": "CekLaptop - RESTful API & Engine Certainty Factor",
+		"description": "Koleksi Postman lengkap untuk seluruh endpoint API CRUD dan Engine Diagnosa Certainty Factor pada CekLaptop.id.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://127.0.0.1:8000/api",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Master Data",
+			"item": [
+				{
+					"name": "Status API",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Accept", "value": "application/json" }
+						],
+						"url": {
+							"raw": "{{base_url}}",
+							"host": ["{{base_url}}"]
+						}
+					}
+				},
+				{
+					"name": "Get Confidence Levels",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Accept", "value": "application/json" }
+						],
+						"url": {
+							"raw": "{{base_url}}/confidence-levels",
+							"host": ["{{base_url}}"],
+							"path": ["confidence-levels"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Gejala",
+			"item": [
+				{
+					"name": "Get Semua Gejala",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Accept", "value": "application/json" }
+						],
+						"url": {
+							"raw": "{{base_url}}/gejala",
+							"host": ["{{base_url}}"],
+							"path": ["gejala"]
+						}
+					}
+				},
+				{
+					"name": "Search Gejala",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Accept", "value": "application/json" }
+						],
+						"url": {
+							"raw": "{{base_url}}/gejala?search=layar",
+							"host": ["{{base_url}}"],
+							"path": ["gejala"],
+							"query": [
+								{ "key": "search", "value": "layar" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Tambah Gejala",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nama_gejala\": \"Kipas laptop berbunyi mendengung sangat bising\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/gejala",
+							"host": ["{{base_url}}"],
+							"path": ["gejala"]
+						}
+					}
+				},
+				{
+					"name": "Detail Gejala",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Accept", "value": "application/json" }
+						],
+						"url": {
+							"raw": "{{base_url}}/gejala/1",
+							"host": ["{{base_url}}"],
+							"path": ["gejala", "1"]
+						}
+					}
+				},
+				{
+					"name": "Update Gejala",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nama_gejala\": \"Baterai tidak dapat mengisi daya sama sekali\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/gejala/1",
+							"host": ["{{base_url}}"],
+							"path": ["gejala", "1"]
+						}
+					}
+				},
+				{
+					"name": "Hapus Gejala",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{ "key": "Accept", "value": "application/json" }
+						],
+						"url": {
+							"raw": "{{base_url}}/gejala/28",
+							"host": ["{{base_url}}"],
+							"path": ["gejala", "28"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Kerusakan",
+			"item": [
+				{
+					"name": "Get Semua Kerusakan",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Accept", "value": "application/json" }
+						],
+						"url": {
+							"raw": "{{base_url}}/kerusakan",
+							"host": ["{{base_url}}"],
+							"path": ["kerusakan"]
+						}
+					}
+				},
+				{
+					"name": "Tambah Kerusakan",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nama_kerusakan\": \"Thermal Overheating\",\n  \"detail_kerusakan\": \"Suhu laptop terlalu tinggi sehingga sistem melambat.\",\n  \"solusi_kerusakan\": \"Bersihkan kipas pendingin dan ganti pasta termal processor.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/kerusakan",
+							"host": ["{{base_url}}"],
+							"path": ["kerusakan"]
+						}
+					}
+				},
+				{
+					"name": "Detail Kerusakan",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Accept", "value": "application/json" }
+						],
+						"url": {
+							"raw": "{{base_url}}/kerusakan/1",
+							"host": ["{{base_url}}"],
+							"path": ["kerusakan", "1"]
+						}
+					}
+				},
+				{
+					"name": "Update Kerusakan",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nama_kerusakan\": \"Baterai Rusak Total\",\n  \"solusi_kerusakan\": \"Ganti baterai orisinil sesuai tipe laptop.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/kerusakan/1",
+							"host": ["{{base_url}}"],
+							"path": ["kerusakan", "1"]
+						}
+					}
+				},
+				{
+					"name": "Hapus Kerusakan",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{ "key": "Accept", "value": "application/json" }
+						],
+						"url": {
+							"raw": "{{base_url}}/kerusakan/11",
+							"host": ["{{base_url}}"],
+							"path": ["kerusakan", "11"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Basis Pengetahuan",
+			"item": [
+				{
+					"name": "Get Semua Aturan",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Accept", "value": "application/json" }
+						],
+						"url": {
+							"raw": "{{base_url}}/basis-pengetahuan",
+							"host": ["{{base_url}}"],
+							"path": ["basis-pengetahuan"]
+						}
+					}
+				},
+				{
+					"name": "Filter Aturan Berdasarkan Kerusakan",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Accept", "value": "application/json" }
+						],
+						"url": {
+							"raw": "{{base_url}}/basis-pengetahuan?kerusakan_id=1",
+							"host": ["{{base_url}}"],
+							"path": ["basis-pengetahuan"],
+							"query": [
+								{ "key": "kerusakan_id", "value": "1" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Tambah Aturan Baru",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"gejala_id\": 14,\n  \"kerusakan_id\": 4,\n  \"mb\": 0.85,\n  \"md\": 0.05\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/basis-pengetahuan",
+							"host": ["{{base_url}}"],
+							"path": ["basis-pengetahuan"]
+						}
+					}
+				},
+				{
+					"name": "Detail Aturan",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Accept", "value": "application/json" }
+						],
+						"url": {
+							"raw": "{{base_url}}/basis-pengetahuan/1",
+							"host": ["{{base_url}}"],
+							"path": ["basis-pengetahuan", "1"]
+						}
+					}
+				},
+				{
+					"name": "Update Bobot Aturan",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"mb\": 0.90,\n  \"md\": 0.02\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/basis-pengetahuan/1",
+							"host": ["{{base_url}}"],
+							"path": ["basis-pengetahuan", "1"]
+						}
+					}
+				},
+				{
+					"name": "Hapus Aturan",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{ "key": "Accept", "value": "application/json" }
+						],
+						"url": {
+							"raw": "{{base_url}}/basis-pengetahuan/38",
+							"host": ["{{base_url}}"],
+							"path": ["basis-pengetahuan", "38"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Konsultasi & Diagnosa",
+			"item": [
+				{
+					"name": "Get Riwayat Konsultasi",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Accept", "value": "application/json" }
+						],
+						"url": {
+							"raw": "{{base_url}}/konsultasi",
+							"host": ["{{base_url}}"],
+							"path": ["konsultasi"]
+						}
+					}
+				},
+				{
+					"name": "Input Data Konsultasi",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Budi Santoso\",\n  \"email\": \"budi@example.com\",\n  \"gender\": \"L\",\n  \"consultation_date\": \"2026-09-26\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/konsultasi",
+							"host": ["{{base_url}}"],
+							"path": ["konsultasi"]
+						}
+					}
+				},
+				{
+					"name": "Detail Konsultasi",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Accept", "value": "application/json" }
+						],
+						"url": {
+							"raw": "{{base_url}}/konsultasi/1",
+							"host": ["{{base_url}}"],
+							"path": ["konsultasi", "1"]
+						}
+					}
+				},
+				{
+					"name": "Hitung Diagnosa (Certainty Factor)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"selected\": [\n    {\n      \"gejala_id\": 1,\n      \"confidence\": 0.8\n    },\n    {\n      \"gejala_id\": 3,\n      \"confidence\": 0.6\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/konsultasi/1/diagnosa",
+							"host": ["{{base_url}}"],
+							"path": ["konsultasi", "1", "diagnosa"]
+						}
+					}
+				},
+				{
+					"name": "Hapus Riwayat Konsultasi",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{ "key": "Accept", "value": "application/json" }
+						],
+						"url": {
+							"raw": "{{base_url}}/konsultasi/1",
+							"host": ["{{base_url}}"],
+							"path": ["konsultasi", "1"]
+						}
+					}
+				}
+			]
+		}
+	]
+}

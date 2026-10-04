@@ -1,0 +1,1690 @@
+{
+  "info": {
+    "name": "Irtree Dessert API",
+    "description": "Koleksi pengujian 8 kelompok API Irtree Dessert. Isi variabel base_url dan phpsessid (cookie PHPSESSID admin dari browser, pada domain yang sama dengan base_url) sebelum menjalankan request bertanda (admin). Variabel test_cookie diisi otomatis untuk hosting dengan pemeriksaan bot.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost/IrtreeDessert/api"
+    },
+    {
+      "key": "phpsessid",
+      "value": "ISI_DENGAN_PHPSESSID_ADMIN"
+    },
+    {
+      "key": "test_cookie",
+      "value": "0"
+    },
+    {
+      "key": "menu_id",
+      "value": "0"
+    },
+    {
+      "key": "order_id",
+      "value": "0"
+    },
+    {
+      "key": "user_id",
+      "value": "0"
+    },
+    {
+      "key": "kontak_id",
+      "value": "0"
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Hosting gratis (InfinityFree) memasang pemeriksaan bot berbasis JavaScript.",
+          "// Skrip ini membaca tantangan itu dan menghitung cookie __test otomatis.",
+          "const base = pm.collectionVariables.get('base_url') || '';",
+          "const lokal = /localhost|127\\.0\\.0\\.1/.test(base);",
+          "if (!lokal) {",
+          "  pm.sendRequest({ url: base + '/health.php', method: 'GET' }, (err, res) => {",
+          "    if (!err && res) {",
+          "      const t = res.text();",
+          "      const m = t.match(/toNumbers\\(\"([0-9a-f]+)\"\\),b=toNumbers\\(\"([0-9a-f]+)\"\\),c=toNumbers\\(\"([0-9a-f]+)\"\\)/);",
+          "      if (m) {",
+          "        const CryptoJS = require('crypto-js');",
+          "        const key = CryptoJS.enc.Hex.parse(m[1]);",
+          "        const iv = CryptoJS.enc.Hex.parse(m[2]);",
+          "        const ct = CryptoJS.enc.Hex.parse(m[3]);",
+          "        const dec = CryptoJS.AES.decrypt({ ciphertext: ct }, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.NoPadding });",
+          "        pm.collectionVariables.set('test_cookie', dec.toString(CryptoJS.enc.Hex));",
+          "      }",
+          "    }",
+          "  });",
+          "}"
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "0. Health dan Info (publik)",
+      "item": [
+        {
+          "name": "GET health",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "__test={{test_cookie}}"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "health.php"
+              ],
+              "raw": "{{base_url}}/health.php"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET info",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "__test={{test_cookie}}"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "info.php"
+              ],
+              "raw": "{{base_url}}/info.php"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "1. Menu",
+      "item": [
+        {
+          "name": "GET semua menu",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "__test={{test_cookie}}"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "menu.php"
+              ],
+              "raw": "{{base_url}}/menu.php"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET detail menu 13",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "__test={{test_cookie}}"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "menu.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "13"
+                }
+              ],
+              "raw": "{{base_url}}/menu.php?id=13"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST tambah menu (admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{phpsessid}}; __test={{test_cookie}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "menu.php"
+              ],
+              "raw": "{{base_url}}/menu.php"
+            },
+            "description": "Menyimpan Menu_id hasil respons ke variabel menu_id.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"Nama\": \"Menu Uji Postman\",\n  \"Harga\": 10000,\n  \"Stok\": 5,\n  \"Deskripsi\": \"Data uji\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", () => pm.response.to.have.status(201));",
+                  "const j = pm.response.json();",
+                  "if (j.Menu_id !== undefined) pm.collectionVariables.set('menu_id', j.Menu_id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUT ubah menu uji (admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{phpsessid}}; __test={{test_cookie}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "menu.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{menu_id}}"
+                }
+              ],
+              "raw": "{{base_url}}/menu.php?id={{menu_id}}"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"Harga\": 12000,\n  \"Stok\": 8\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "DELETE hapus menu uji (admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{phpsessid}}; __test={{test_cookie}}"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "menu.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{menu_id}}"
+                }
+              ],
+              "raw": "{{base_url}}/menu.php?id={{menu_id}}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST harga negatif (422)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{phpsessid}}; __test={{test_cookie}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "menu.php"
+              ],
+              "raw": "{{base_url}}/menu.php"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"Nama\": \"X\",\n  \"Harga\": -5,\n  \"Stok\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 422\", () => pm.response.to.have.status(422));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "2. Keranjang (publik, session)",
+      "item": [
+        {
+          "name": "POST tambah menu 13 x2",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "__test={{test_cookie}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "keranjang.php"
+              ],
+              "raw": "{{base_url}}/keranjang.php"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"Menu_id\": 13,\n  \"Quantity\": 2\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", () => pm.response.to.have.status(201));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET isi keranjang",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "__test={{test_cookie}}"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "keranjang.php"
+              ],
+              "raw": "{{base_url}}/keranjang.php"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUT ubah jumlah jadi 3",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "__test={{test_cookie}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "keranjang.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "13"
+                }
+              ],
+              "raw": "{{base_url}}/keranjang.php?id=13"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"Quantity\": 3\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUT melebihi stok (409)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "__test={{test_cookie}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "keranjang.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "13"
+                }
+              ],
+              "raw": "{{base_url}}/keranjang.php?id=13"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"Quantity\": 999\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 409\", () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "DELETE hapus item",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "__test={{test_cookie}}"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "keranjang.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "13"
+                }
+              ],
+              "raw": "{{base_url}}/keranjang.php?id=13"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "description": "Keranjang tersimpan di session, jalankan berurutan dari atas."
+    },
+    {
+      "name": "3. Pesanan",
+      "item": [
+        {
+          "name": "POST checkout (publik)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "__test={{test_cookie}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pesanan.php"
+              ],
+              "raw": "{{base_url}}/pesanan.php"
+            },
+            "description": "Stok menu 13 berkurang 2. Menyimpan Order_id ke variabel order_id.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama_customer\": \"Uji Postman\",\n  \"nomor_customer\": \"081200000000\",\n  \"metode_bayar\": \"cash\",\n  \"items\": [\n    {\n      \"Menu_id\": 13,\n      \"Quantity\": 2\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", () => pm.response.to.have.status(201));",
+                  "const j = pm.response.json();",
+                  "if (j.Order_id !== undefined) pm.collectionVariables.set('order_id', j.Order_id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET detail pesanan sebagai pelanggan",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "__test={{test_cookie}}"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pesanan.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{order_id}}"
+                },
+                {
+                  "key": "nomor",
+                  "value": "081200000000"
+                }
+              ],
+              "raw": "{{base_url}}/pesanan.php?id={{order_id}}&nomor=081200000000"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET semua pesanan (admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{phpsessid}}; __test={{test_cookie}}"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pesanan.php"
+              ],
+              "raw": "{{base_url}}/pesanan.php"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET detail pesanan (admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{phpsessid}}; __test={{test_cookie}}"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pesanan.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{order_id}}"
+                }
+              ],
+              "raw": "{{base_url}}/pesanan.php?id={{order_id}}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUT status Sudah Bayar (admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{phpsessid}}; __test={{test_cookie}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pesanan.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{order_id}}"
+                }
+              ],
+              "raw": "{{base_url}}/pesanan.php?id={{order_id}}"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"Status\": \"Sudah Bayar\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUT status Batal, stok kembali (admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{phpsessid}}; __test={{test_cookie}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pesanan.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{order_id}}"
+                }
+              ],
+              "raw": "{{base_url}}/pesanan.php?id={{order_id}}"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"Status\": \"Batal\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST stok tidak cukup (409)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "__test={{test_cookie}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pesanan.php"
+              ],
+              "raw": "{{base_url}}/pesanan.php"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama_customer\": \"Uji\",\n  \"nomor_customer\": \"081200000000\",\n  \"metode_bayar\": \"cash\",\n  \"items\": [\n    {\n      \"Menu_id\": 13,\n      \"Quantity\": 999\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 409\", () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "DELETE hapus pesanan uji (admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{phpsessid}}; __test={{test_cookie}}"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pesanan.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{order_id}}"
+                }
+              ],
+              "raw": "{{base_url}}/pesanan.php?id={{order_id}}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "4. Users (admin)",
+      "item": [
+        {
+          "name": "GET semua user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{phpsessid}}; __test={{test_cookie}}"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users.php"
+              ],
+              "raw": "{{base_url}}/users.php"
+            },
+            "description": "Perhatikan: tidak ada field Password."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST tambah user uji",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{phpsessid}}; __test={{test_cookie}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users.php"
+              ],
+              "raw": "{{base_url}}/users.php"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"Nama\": \"User Uji\",\n  \"Email\": \"uji.postman@example.com\",\n  \"Password\": \"passwordtes123\",\n  \"Role\": \"kasir\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", () => pm.response.to.have.status(201));",
+                  "const j = pm.response.json();",
+                  "if (j.User_id !== undefined) pm.collectionVariables.set('user_id', j.User_id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST email ganda (409)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{phpsessid}}; __test={{test_cookie}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users.php"
+              ],
+              "raw": "{{base_url}}/users.php"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"Nama\": \"User Uji 2\",\n  \"Email\": \"uji.postman@example.com\",\n  \"Password\": \"passwordtes123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 409\", () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUT ubah role user uji",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{phpsessid}}; __test={{test_cookie}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{user_id}}"
+                }
+              ],
+              "raw": "{{base_url}}/users.php?id={{user_id}}"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"Role\": \"pelanggan\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "DELETE hapus user uji",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{phpsessid}}; __test={{test_cookie}}"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{user_id}}"
+                }
+              ],
+              "raw": "{{base_url}}/users.php?id={{user_id}}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "5. Kontak",
+      "item": [
+        {
+          "name": "GET semua kontak",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "__test={{test_cookie}}"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "kontak.php"
+              ],
+              "raw": "{{base_url}}/kontak.php"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST tambah kontak (admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{phpsessid}}; __test={{test_cookie}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "kontak.php"
+              ],
+              "raw": "{{base_url}}/kontak.php"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"Type\": \"whatsapp\",\n  \"Value\": \"081200000000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", () => pm.response.to.have.status(201));",
+                  "const j = pm.response.json();",
+                  "if (j.Kontak_id !== undefined) pm.collectionVariables.set('kontak_id', j.Kontak_id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUT ubah kontak (admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{phpsessid}}; __test={{test_cookie}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "kontak.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{kontak_id}}"
+                }
+              ],
+              "raw": "{{base_url}}/kontak.php?id={{kontak_id}}"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"Value\": \"081211111111\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "DELETE hapus kontak (admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{phpsessid}}; __test={{test_cookie}}"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "kontak.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{kontak_id}}"
+                }
+              ],
+              "raw": "{{base_url}}/kontak.php?id={{kontak_id}}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "6. Pengaturan",
+      "item": [
+        {
+          "name": "GET semua pengaturan",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "__test={{test_cookie}}"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pengaturan.php"
+              ],
+              "raw": "{{base_url}}/pengaturan.php"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET satu pengaturan (hero_title)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "__test={{test_cookie}}"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pengaturan.php"
+              ],
+              "query": [
+                {
+                  "key": "nama",
+                  "value": "hero_title"
+                }
+              ],
+              "raw": "{{base_url}}/pengaturan.php?nama=hero_title"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUT hero_title (admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{phpsessid}}; __test={{test_cookie}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pengaturan.php"
+              ],
+              "query": [
+                {
+                  "key": "nama",
+                  "value": "hero_title"
+                }
+              ],
+              "raw": "{{base_url}}/pengaturan.php?nama=hero_title"
+            },
+            "description": "Diisi nilai asli, jadi aman dijalankan.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nilai\": \"IRTREE - DESSERT\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "7. Dashboard (admin)",
+      "item": [
+        {
+          "name": "GET dashboard",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{phpsessid}}; __test={{test_cookie}}"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "dashboard.php"
+              ],
+              "raw": "{{base_url}}/dashboard.php"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "8. Tes keamanan (tanpa cookie admin)",
+      "item": [
+        {
+          "name": "GET users tanpa login (403)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "__test={{test_cookie}}"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users.php"
+              ],
+              "raw": "{{base_url}}/users.php"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 403\", () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST menu tanpa login (403)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "__test={{test_cookie}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "menu.php"
+              ],
+              "raw": "{{base_url}}/menu.php"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"Nama\": \"X\",\n  \"Harga\": 1000,\n  \"Stok\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 403\", () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET dashboard tanpa login (403)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "__test={{test_cookie}}"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "dashboard.php"
+              ],
+              "raw": "{{base_url}}/dashboard.php"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 403\", () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUT pengaturan tanpa login (403)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "__test={{test_cookie}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pengaturan.php"
+              ],
+              "query": [
+                {
+                  "key": "nama",
+                  "value": "hero_title"
+                }
+              ],
+              "raw": "{{base_url}}/pengaturan.php?nama=hero_title"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nilai\": \"HACK\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 403\", () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "description": "Tanpa header Cookie admin, semua harus ditolak dengan 403."
+    }
+  ]
+}

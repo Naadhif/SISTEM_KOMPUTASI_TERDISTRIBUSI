@@ -1,0 +1,340 @@
+{
+  "info": {
+    "_postman_id": "32e88be6-15b9-4a08-b196-75e889a05508",
+    "name": "Sistem Komputasi",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54083846",
+    "_collection_link": "https://go.postman.co/collection/54083846-32e88be6-15b9-4a08-b196-75e889a05508?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "https://cushiony-perverse-bryan.ngrok-free.dev/api/customer/menus",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://cushiony-perverse-bryan.ngrok-free.dev/api/customer/menus",
+          "protocol": "https",
+          "host": [
+            "cushiony-perverse-bryan",
+            "ngrok-free",
+            "dev"
+          ],
+          "path": [
+            "api",
+            "customer",
+            "menus"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://cushiony-perverse-bryan.ngrok-free.dev/api/customer/menus/1",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://cushiony-perverse-bryan.ngrok-free.dev/api/customer/menus/1",
+          "protocol": "https",
+          "host": [
+            "cushiony-perverse-bryan",
+            "ngrok-free",
+            "dev"
+          ],
+          "path": [
+            "api",
+            "customer",
+            "menus",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://cushiony-perverse-bryan.ngrok-free.dev/api/customer/orders",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nama\": \"Budi Santoso\",\r\n  \"phone\": \"081234567890\",\r\n  \"email\": \"budi@example.com\",\r\n  \"catatan\": \"Tanpa bawang\",\r\n  \"items\": [\r\n    {\r\n        \"id_menu\": 1,\r\n        \"qty\": 2,\r\n        \"kustomisasi\": \"Tambah keju, tanpa saus\"\r\n    }\r\n  ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://cushiony-perverse-bryan.ngrok-free.dev/api/customer/orders",
+          "protocol": "https",
+          "host": [
+            "cushiony-perverse-bryan",
+            "ngrok-free",
+            "dev"
+          ],
+          "path": [
+            "api",
+            "customer",
+            "orders"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://cushiony-perverse-bryan.ngrok-free.dev/api/customer/orders/11",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nama\": \"Budi Santoso\",\r\n  \"phone\": \"081234567890\",\r\n  \"email\": \"budi@example.com\",\r\n  \"catatan\": \"Tanpa bawang\",\r\n  \"items\": [\r\n    {\r\n        \"id_menu\": 1,\r\n        \"qty\": 2,\r\n        \"kustomisasi\": \"Tambah keju, tanpa saus\"\r\n    }\r\n  ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://cushiony-perverse-bryan.ngrok-free.dev/api/customer/orders/11",
+          "protocol": "https",
+          "host": [
+            "cushiony-perverse-bryan",
+            "ngrok-free",
+            "dev"
+          ],
+          "path": [
+            "api",
+            "customer",
+            "orders",
+            "11"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://cushiony-perverse-bryan.ngrok-free.dev/api/customer/orders/id",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nama\": \"Budi Santoso\",\r\n  \"phone\": \"081234567890\",\r\n  \"email\": \"budi@example.com\",\r\n  \"catatan\": \"Tanpa bawang\",\r\n  \"items\": [\r\n    {\r\n        \"id_menu\": 1,\r\n        \"qty\": 2,\r\n        \"kustomisasi\": \"Tambah keju, tanpa saus\"\r\n    }\r\n  ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://cushiony-perverse-bryan.ngrok-free.dev/api/customer/orders/id",
+          "protocol": "https",
+          "host": [
+            "cushiony-perverse-bryan",
+            "ngrok-free",
+            "dev"
+          ],
+          "path": [
+            "api",
+            "customer",
+            "orders",
+            "id"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://cushiony-perverse-bryan.ngrok-free.dev/api/customer/orders/11",
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"catatan\": \"Antar ke meja 5\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://cushiony-perverse-bryan.ngrok-free.dev/api/customer/orders/11",
+          "protocol": "https",
+          "host": [
+            "cushiony-perverse-bryan",
+            "ngrok-free",
+            "dev"
+          ],
+          "path": [
+            "api",
+            "customer",
+            "orders",
+            "11"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://cushiony-perverse-bryan.ngrok-free.dev/api/customer/orders/11/items",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"id_menu\": 2,\r\n  \"qty\": 1,\r\n  \"kustomisasi\": \"Extra pedas\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://cushiony-perverse-bryan.ngrok-free.dev/api/customer/orders/11/items",
+          "protocol": "https",
+          "host": [
+            "cushiony-perverse-bryan",
+            "ngrok-free",
+            "dev"
+          ],
+          "path": [
+            "api",
+            "customer",
+            "orders",
+            "11",
+            "items"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://cushiony-perverse-bryan.ngrok-free.dev/api/customer/orders/11/items/2",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"id_menu\": 2,\r\n  \"qty\": 4,\r\n  \"kustomisasi\": \"Tanpa bawang\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://cushiony-perverse-bryan.ngrok-free.dev/api/customer/orders/11/items/2",
+          "protocol": "https",
+          "host": [
+            "cushiony-perverse-bryan",
+            "ngrok-free",
+            "dev"
+          ],
+          "path": [
+            "api",
+            "customer",
+            "orders",
+            "11",
+            "items",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://cushiony-perverse-bryan.ngrok-free.dev/api/customer/checkout",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"order_id\": 11,\r\n  \"paymentMethod\": \"kasir\",\r\n  \"catatan\": \"Bayar di kasir ya\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://cushiony-perverse-bryan.ngrok-free.dev/api/customer/checkout",
+          "protocol": "https",
+          "host": [
+            "cushiony-perverse-bryan",
+            "ngrok-free",
+            "dev"
+          ],
+          "path": [
+            "api",
+            "customer",
+            "checkout"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://cushiony-perverse-bryan.ngrok-free.dev/api/customer/orders/11/items/23",
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"qty\": 5\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://cushiony-perverse-bryan.ngrok-free.dev/api/customer/orders/11/items/23",
+          "protocol": "https",
+          "host": [
+            "cushiony-perverse-bryan",
+            "ngrok-free",
+            "dev"
+          ],
+          "path": [
+            "api",
+            "customer",
+            "orders",
+            "11",
+            "items",
+            "23"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://cushiony-perverse-bryan.ngrok-free.dev/api/customer/orders/11/items/25",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "https://cushiony-perverse-bryan.ngrok-free.dev/api/customer/orders/11/items/25",
+          "protocol": "https",
+          "host": [
+            "cushiony-perverse-bryan",
+            "ngrok-free",
+            "dev"
+          ],
+          "path": [
+            "api",
+            "customer",
+            "orders",
+            "11",
+            "items",
+            "25"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
